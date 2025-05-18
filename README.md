@@ -21,7 +21,35 @@ This project demonstrates how to blink an LED connected to **PC13** using **Time
    - Waits for the timer's update event flag (UIF).
    - Clears the UIF flag.
    - Toggles the LED on PC13.
+   - 
+## 📄 Using HAL Library
+```c
+ while (1)
+  {
 
+	  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
+	  HAL_Delay(1000);
+	  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+	  HAL_Delay(1000);
+  }
+```
+
+## 📄 Using Loop Delay
+```c
+    while (1) {
+
+		//GPIOC_ODR ^=0x2000; // Toggle PC13 another Method
+		
+        // Reset PC13 (set bit 29 to reset pin 13)
+        GPIOC_BSRR |= (1U << 13);  // Set PC13 low (LED on for Blue Pill)
+        for (int i = 0; i < delay; i++);  // crude delay
+
+        // Set PC13 (bit 13 + 16 = bit 29)
+        GPIOC_BSRR |= (1U << (29));  // Set PC13 high (LED off)
+        for (int i = 0; i < delay; i++);  // crude delay
+    }
+
+```
 ## 📄 LED_Blink_using_Timer2
 
 ```c
@@ -67,17 +95,7 @@ int main(void){
 }
 
 ```
-## Using HAL Library
-```c
- while (1)
-  {
 
-	  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
-	  HAL_Delay(1000);
-	  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-	  HAL_Delay(1000);
-  }
-```
 ## 💻 Requirements
 
 - STM32F103C8T6 or compatible microcontroller
